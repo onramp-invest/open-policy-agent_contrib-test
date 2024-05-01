@@ -148,7 +148,7 @@ function _M.execute(conf)
     end
 
     -- when the policy fail, 'result' is omitted
-    if not res.result then
+    if not res.result or not res.result.allow then
         kong.log.info("Access forbidden")
         return kong.response.exit(403, { message = "Access Forbidden", error_code = "ERROR_CODE_UNAUTHORIZED" })
     end
