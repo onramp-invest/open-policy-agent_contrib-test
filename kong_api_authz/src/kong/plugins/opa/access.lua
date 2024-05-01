@@ -47,12 +47,12 @@ local function getDocument(input, conf)
         keepalive_timeout = conf.server.connection.timeout,
         keepalive_pool = conf.server.connection.pool
     })
-	kong.log.error("50 OK")
+	kong.log.err("50 OK")
 
     if err then
         error(err) -- failed to request the endpoint
     end
-	kong.log.error("55 OK")
+	kong.log.err("55 OK")
 
     -- deserialise the response into a Lua table
     return assert(cjson_safe.decode(res.body))
@@ -82,7 +82,7 @@ end
 function _M.execute(conf)
     local authorization = ngx.var.http_authorization
 
-	kong.log.error("85 OK")
+	kong.log.err("85 OK")
 
     -- decode JWT token
     local token = {}
