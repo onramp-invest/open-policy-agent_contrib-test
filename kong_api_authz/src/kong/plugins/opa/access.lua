@@ -106,6 +106,8 @@ function _M.execute(conf)
     }
 
     local status, res = pcall(getDocument, input, conf)
+    kong.log.err(status)
+    kong.log.err(res)
 
     if not status then
         kong.log.err("Failed to get document: ", res)
