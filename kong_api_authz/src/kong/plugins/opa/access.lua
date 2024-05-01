@@ -7,6 +7,9 @@ local function interp(s, tab)
     return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end))
 end
 
+
+
+
 -- slice a list
 local function slice(list, from, to)
     local sliced_results = {};
@@ -108,6 +111,7 @@ function _M.execute(conf)
     local status, res = pcall(getDocument, input, conf)
     kong.log.err(status)
     kong.log.err(res)
+    kong.log.err(res.result)
 
     if not status then
         kong.log.err("Failed to get document: ", res)
