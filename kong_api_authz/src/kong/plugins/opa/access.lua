@@ -7,7 +7,35 @@ local function interp(s, tab)
     return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end))
 end
 
+local function tableToString(tbl, depth)
+    if not depth then depth = 0 end
+    if depth > 5 then return "..." end  -- Limit depth to prevent infinite recursion
 
+    local result = "{"
+    for k, v in pairs(tbl) do
+        -- Format the key
+        if type(k) == "string" then
+            k = '"' .. k .. '"'
+        end
+
+        -- Format the value
+        local value = v
+        if type(v) == "table" then
+            value = tableToString(v, depth + 1)
+        elseif type(v) == "string" then
+            value = '"' .. v .. '"'
+        end
+
+        result = result .. "[" .. k .. "] = " .. tostring(value) .. ", "
+    end
+
+    -- Remove the last comma and space if any
+    if result ~= "{" then
+        result = result:sub(1, -3)
+    end
+
+    return result .. "}"
+end
 
 
 -- slice a list
@@ -112,6 +140,7 @@ function _M.execute(conf)
     kong.log.err(status)
     kong.log.err(res)
     kong.log.err(res.result)
+    kong.log.err(tableToString(res.result))
 
     if not status then
         kong.log.err("Failed to get document: ", res)
